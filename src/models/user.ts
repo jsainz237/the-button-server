@@ -1,5 +1,4 @@
-import { Model } from "sequelize/types";
-import { Table, PrimaryKey, Unique, AllowNull, Column, DataType } from "sequelize-typescript";
+import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType } from "sequelize-typescript";
 
 export interface UserAttr {
     id: string;
@@ -8,12 +7,12 @@ export interface UserAttr {
 }
 
 @Table({ timestamps: false, tableName: 'users' })
-export class User extends Model<User> implements UserAttr {
+export default class User extends Model<User> implements UserAttr {
     
     @PrimaryKey
     @Unique
     @AllowNull(false)
-    @Column(DataType.UUIDV4)
+    @Column(DataType.UUID)
     id!: string;
 
     @AllowNull(false)
