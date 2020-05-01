@@ -6,19 +6,27 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/index.ts",
+    "dev": "nodemon --exec ts-node --files src/index.ts",
     "prod": "tsc && node ./build/index.js"
   },
   "author": "Jesse Sainz",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.6",
-    "@types/socket.io": "^2.1.4",
     "express": "^4.17.1",
+    "pg": "^8.0.3",
+    "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.7",
     "sequelize-typescript": "^1.1.0",
-    "socket.io": "^2.3.0",
-    "ts-node-dev": "^1.0.0-pre.44",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.30",
+    "@types/express": "^4.17.6",
+    "@types/node": "^13.13.4",
+    "@types/socket.io": "^2.1.4",
+    "@types/validator": "^13.0.0",
+    "nodemon": "^2.0.3",
+    "ts-node": "^8.9.1",
     "typescript": "^3.8.3"
   }
 }
