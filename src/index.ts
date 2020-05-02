@@ -8,7 +8,7 @@ import { SocketEvent } from './types/events';
 import { database } from './database';
 import User from './models/user';
 import registerRoutes from './routes/register';
-// import { database } from './database';
+import loginRoutes from './routes/login';
 
 const port = process.env.PORT || 5000;
 
@@ -29,6 +29,7 @@ database.sync({ force: forceSyncDB });
 
 // REST routes
 app.use('/auth/register/', registerRoutes);
+app.use('/auth/login', loginRoutes);
 
 io.on('connect', socket => {
     console.log("client connected");
