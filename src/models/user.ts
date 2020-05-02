@@ -3,7 +3,8 @@ import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType } from "s
 export interface UserAttr {
     id: string;
     username: string;
-    rank: Rank;
+    password: string;
+    rank?: Rank;
 }
 
 @Table({ timestamps: false, tableName: 'users' })
@@ -19,12 +20,16 @@ export default class User extends Model<User> implements UserAttr {
     @Column
     username!: string;
 
+    @AllowNull(false)
+    @Column
+    password!: string;
+
     @AllowNull(true)
     @Column(DataType.STRING)
     rank!: Rank;
 }
 
-enum Rank {
+export enum Rank {
     GRAY = "GRAY",
     PURPLE = "PURPLE",
     BLUE = "BLUE",
