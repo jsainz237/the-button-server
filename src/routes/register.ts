@@ -6,18 +6,19 @@ import User from '../models/user';
 
 const router = express.Router();
 
-interface ReqBody {
+interface RegisterReqBody {
     username: string;
     password: string;
 }
 
-router.post('/', (req: Request<{}, {}, ReqBody>, res: Response) => {
+router.post('/', (req: Request<{}, {}, RegisterReqBody>, res: Response) => {
     const user_id = uuidv4();
     const username = req.body.username;
+    const ci_username = username.toLowerCase();
 
     try {
         const password_encrypted = bcrypt.hashSync(req.body.password, 10);
-        User.create({ id: user_id, username, password: password_encrypted });
+        User.create({ id: user_id, ci_username, username, password: password_encrypted });
         res.status(201).send();
     } catch(err) {
         console.log(err);

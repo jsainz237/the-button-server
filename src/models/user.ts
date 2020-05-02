@@ -2,6 +2,7 @@ import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType } from "s
 
 export interface UserAttr {
     id: string;
+    ci_username: string;
     username: string;
     password: string;
     rank?: Rank;
@@ -15,6 +16,11 @@ export default class User extends Model<User> implements UserAttr {
     @AllowNull(false)
     @Column(DataType.UUID)
     id!: string;
+
+    @AllowNull(false)
+    @Unique
+    @Column
+    ci_username!: string;
 
     @AllowNull(false)
     @Column
