@@ -1,5 +1,6 @@
 export enum SocketEvent {
     PRESSED = "PRESSED",
     RESET = "RESET",
-    GAIN_RANK = "GAIN_RANK",
+    UPDATE_COLOR = "UPDATE_COLOR",
+    DEATH = "DEATH"
 };

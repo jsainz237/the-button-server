@@ -1,4 +1,5 @@
 import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType } from "sequelize-typescript";
+import { Rank } from "../types/ranks";
 
 export interface UserAttr {
     id: string;
@@ -33,14 +34,4 @@ export default class User extends Model<User> implements UserAttr {
     @AllowNull(true)
     @Column(DataType.STRING)
     rank!: Rank;
-}
-
-export enum Rank {
-    GRAY = "GRAY",
-    PURPLE = "PURPLE",
-    BLUE = "BLUE",
-    GREEN = "GREEN",
-    YELLOW = "YELLOW",
-    ORANGE = "ORANGE",
-    RED = "RED"
 }
