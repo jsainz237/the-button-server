@@ -39,7 +39,7 @@ app.use('/auth/login', loginRoutes);
 
 io.on('connect', socket => {
     console.log('client connected');
-    socket.emit(SocketEvent.UPDATE_COLOR, colorState.color);
+    socket.emit(SocketEvent.UPDATE_COLOR, { color: colorState.color, index: colorState.index });
     socket.on(SocketEvent.PRESSED, (user_id?: string) => on_pressed_event(io, user_id))
 })
 

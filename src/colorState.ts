@@ -2,11 +2,14 @@ import { Rank } from "./types/ranks";
 import { io } from './index';
 import { SocketEvent } from "./types/events";
 
-// should be static cause there will only be 1 instance of
 class ColorState {
     public color: Rank = Rank.GRAY;
-    private index: number = 0;
-    private timer: number | undefined;
+    public index: number = 0;
+    private timer: any; // needs to be any cause typescript complains about Timeout vs number
+
+    constructor() {
+        this.startTimer();
+    }
 
     private colorMapping: Rank[] = [
         Rank.GRAY, 
@@ -24,17 +27,17 @@ class ColorState {
         const countdown_milliseconds = countdown_days * 10000;
         const countdown_interval = countdown_milliseconds / this.colorMapping.length;
 
-        this.timer = window.setInterval(() => this.nextColor(), countdown_interval);
+        this.timer = setInterval(() => this.nextColor(), countdown_interval);
     }
 
     private nextColor() {
         if(this.index === this.colorMapping.length) {
-            window.clearInterval(this.timer);
+            clearInterval(this.timer);
             return io.emit(SocketEvent.DEATH);
         }
         this.index += 1;
         this.color = this.colorMapping[this.index];
-        return io.emit(SocketEvent.UPDATE_COLOR, this.color, this.index);
+        return io.emit(SocketEvent.UPDATE_COLOR, { color: this.color, index: this.index });
     }
 
     public reset(username?: string) {
