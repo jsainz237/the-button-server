@@ -7,7 +7,7 @@ import { SocketEvent } from './types/events';
 import { database } from './database';
 import registerRoutes from './routes/register';
 import loginRoutes from './routes/login';
-import { on_pressed_event } from './socket/pressed';
+import { onPressedEvent } from './socket/pressed';
 import { Rank } from './types/ranks';
 import { colorState } from './colorState';
 
@@ -39,8 +39,12 @@ app.use('/auth/login', loginRoutes);
 
 io.on('connect', socket => {
     console.log('client connected');
+    if(colorState.isDead) { 
+        socket.emit(SocketEvent.DEATH)
+        return;
+    }
     socket.emit(SocketEvent.UPDATE_COLOR, { color: colorState.color, index: colorState.index });
-    socket.on(SocketEvent.PRESSED, (user_id?: string) => on_pressed_event(io, user_id))
+    socket.on(SocketEvent.PRESSED, (user_id?: string) => onPressedEvent(user_id));
 })
 
 

@@ -5,6 +5,7 @@ import { SocketEvent } from "./types/events";
 class ColorState {
     public color: Rank = Rank.GRAY;
     public index: number = 0;
+    public isDead: boolean = false;
     private timer: any; // needs to be any cause typescript complains about Timeout vs number
 
     constructor() {
@@ -31,8 +32,9 @@ class ColorState {
     }
 
     private nextColor() {
-        if(this.index === this.colorMapping.length) {
+        if(this.index === this.colorMapping.length - 1) {
             clearInterval(this.timer);
+            this.isDead = true;
             return io.emit(SocketEvent.DEATH);
         }
         this.index += 1;
@@ -42,8 +44,8 @@ class ColorState {
 
     public reset(username?: string) {
         io.emit(SocketEvent.RESET, username);
-        io.emit(SocketEvent.UPDATE_COLOR, Rank.GRAY);
-        window.clearInterval(this.timer);
+        io.emit(SocketEvent.UPDATE_COLOR, { color: Rank.GRAY, index: 0 });
+        clearInterval(this.timer);
         this.index = 0;
         this.startTimer();
     }
