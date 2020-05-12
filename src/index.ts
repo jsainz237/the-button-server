@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import socketio from 'socket.io';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 // import cookieParser from 'cookie-parser';
 
 import { SocketEvent } from './types/events';
@@ -21,6 +22,14 @@ export let state: { currentColor: Rank } = {
     currentColor: Rank.GRAY
 }
 
+const corsOptions: cors.CorsOptions = {
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+    credentials: false, /** @todo set to true for credentials */
+    methods: "GET,POST",
+    origin: process.env['WEBSITE_URL'] || 'http://localhost:4200',
+    preflightContinue: false
+};
+
 // new express application instance
 const app: express.Application = express();
 const server = new http.Server(app);
@@ -31,6 +40,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+// configure cors
+app.use(cors(corsOptions));
 
 // parse cookie
 // app.use(cookieParser());

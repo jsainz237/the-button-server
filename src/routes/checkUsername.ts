@@ -7,10 +7,9 @@ interface CheckUsernameBody {
     username: string;
 }
 
-// on GET request to /auth/check-username
-router.get('/', async (req: Request<{}, {}, CheckUsernameBody>, res: Response) => {
+// on POST request to /auth/check-username
+router.post('/', async (req: Request<{}, {}, CheckUsernameBody>, res: Response) => {
     const username = req.body.username.toLowerCase();
-
     // look for user in database with matching username
     const user = await User.findOne({
         where: { ci_username: username }
