@@ -72,7 +72,7 @@ io.on('connect', socket => {
         return;
     }
     socket.emit(SocketEvent.UPDATE_COLOR, { color: colorState.color, index: colorState.index });
-    socket.on(SocketEvent.PRESSED, (user_id?: string) => onPressedEvent(user_id));
+    socket.on(SocketEvent.PRESSED, (email?: string) => onPressedEvent(socket, email));
 })
 
 
