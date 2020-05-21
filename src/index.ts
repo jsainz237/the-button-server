@@ -71,6 +71,7 @@ io.on('connect', socket => {
         socket.emit(SocketEvent.DEATH)
         return;
     }
+    socket.emit(SocketEvent.SEND_FEED, { feed: colorState.feed });
     socket.emit(SocketEvent.UPDATE_COLOR, { color: colorState.color, index: colorState.index });
     socket.on(SocketEvent.PRESSED, (email?: string) => onPressedEvent(socket, email));
 })

@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { io } from '../index';
 import { colorState } from '../colorState';
 import User from "../models/user";
 import { SocketEvent } from '../types/events';
@@ -16,8 +15,6 @@ export async function onPressedEvent(socket: SocketIO.Socket, email?: string) {
 
     const displayname = user?.displayname || `Anon-${uuidv4().slice(-5)}`;
     
-    colorState.reset();
-
+    colorState.reset(displayname);
     socket.emit(SocketEvent.SET_USER_COLOR, { rank: current_color });
-    io.emit(SocketEvent.RESET, { displayname, rank: current_color });
 }
