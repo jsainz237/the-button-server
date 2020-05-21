@@ -25,7 +25,7 @@ type ResponseBody = Userinfo | ResponseErrors;
 
 // ----- USER INFO -----//
 
-/** On GET request to /auth/userinfo */
+/** On POST request to /auth/login */
 router.post('/login', [
     check('email').isEmail().withMessage('not a valid email') // validate email is valid
 ], async (
@@ -131,16 +131,18 @@ router.post('/edit-displayname', [
 // ----- CHECK DISPLAYNAME ----- //
 
 /** on POST request to /auth/check-displayname */
-router.post('/check-displayname', [
-    check('displayname').isAlphanumeric().withMessage('displayname must be alphanumeric')
-], async (req: Request<{}, {}, {displayname: string}>, res: Response<{ available: boolean } | ResponseErrors>) => {
+router.get('/check-displayname', async (
+    req: Request<{}, {}, {}, { displayname: string }>, 
+    res: Response<{ available: boolean } | ResponseErrors>
+) => {
     // send validation errors if there are any
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const displayname = req.body.displayname.toLowerCase();
+    
     // look for user in database with matching displayname
+    const displayname = req.query.displayname.toLowerCase();
     const user = await User.findOne({
         where: { ci_displayname: displayname }
     })
