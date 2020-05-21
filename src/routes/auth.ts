@@ -120,7 +120,7 @@ router.post('/edit-displayname', [
             ci_displayname: req.body.displayname.toLowerCase()
         });
 
-        return res.status(201).send({ email: user.email, displayname: user.displayname, rank: user.rank })
+        return res.status(200).send({ email: user.email, displayname: user.displayname, rank: user.rank })
     }
     catch(err) {
         console.log(err);
