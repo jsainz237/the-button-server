@@ -1,12 +1,12 @@
-import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType } from "sequelize-typescript";
+import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType, Default, IsAlphanumeric } from "sequelize-typescript";
 import { Rank } from "../types/ranks";
 
 export interface UserAttr {
     id: string;
-    ci_username: string;
-    username: string;
-    password: string;
-    rank?: Rank;
+    email: string;
+    displayname: string;
+    ci_displayname: string;
+    rank: Rank;
 }
 
 @Table({ timestamps: false, tableName: 'users' })
@@ -19,19 +19,22 @@ export default class User extends Model<User> implements UserAttr {
     id!: string;
 
     @AllowNull(false)
+    @Column
+    email!: string;
+
+    @AllowNull(false)
+    @IsAlphanumeric
+    @Column
+    displayname!: string;
+
+    @AllowNull(false)
+    @IsAlphanumeric
     @Unique
     @Column
-    ci_username!: string;
+    ci_displayname!: string;
 
     @AllowNull(false)
-    @Column
-    username!: string;
-
-    @AllowNull(false)
-    @Column
-    password!: string;
-
-    @AllowNull(true)
+    @Default(Rank.GRAY)
     @Column(DataType.STRING)
     rank!: Rank;
 }

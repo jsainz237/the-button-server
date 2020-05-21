@@ -24,8 +24,8 @@ class ColorState {
     
     private startTimer() {
         const countdown_days = Math.floor(Math.random() * 9) + 2;
-        //const countdown_milliseconds = countdown_days * 86400000;
-        const countdown_milliseconds = countdown_days * 10000;
+        const countdown_milliseconds = countdown_days * 86400000; // days
+        //const countdown_milliseconds = countdown_days * 10000; // mins
         const countdown_interval = countdown_milliseconds / this.colorMapping.length;
 
         this.timer = setInterval(() => this.nextColor(), countdown_interval);
@@ -42,8 +42,8 @@ class ColorState {
         return io.emit(SocketEvent.UPDATE_COLOR, { color: this.color, index: this.index });
     }
 
-    public reset(username?: string) {
-        io.emit(SocketEvent.RESET, username);
+    public reset(displayname?: string) {
+        io.emit(SocketEvent.RESET, displayname);
         io.emit(SocketEvent.UPDATE_COLOR, { color: Rank.GRAY, index: 0 });
         clearInterval(this.timer);
         this.index = 0;

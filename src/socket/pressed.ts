@@ -11,7 +11,7 @@ export async function onPressedEvent(user_id?: string) {
         }) :
         null;
 
-    const username = user?.username || `Anon-${uuidv4().slice(-5)}`;
+    const displayname = user?.displayname || `Anon-${uuidv4().slice(-5)}`;
     colorState.reset();
-    io.emit(SocketEvent.RESET, username)
+    io.emit(SocketEvent.RESET, displayname)
 }
