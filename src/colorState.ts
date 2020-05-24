@@ -31,14 +31,15 @@ class ColorState {
     ];
     
     private startTimer() {
-        const countdown_hours = Math.floor(Math.random() * 5) + 3; // 3 - 7 hours
-        //const countdown_milliseconds = countdown_hours * 3600000; // hours
-        const countdown_milliseconds = countdown_hours * 10000; // mins
+        const countdown_hours = Math.floor(Math.random() * 60) + 30; // 30 - 90 mins
+        const countdown_milliseconds = countdown_hours * 60000; // 60000 ms / min
+        //const countdown_milliseconds = countdown_hours * 10000; // mins
         const countdown_interval = countdown_milliseconds / this.colorMapping.length;
 
         this.timer = setInterval(() => this.nextColor(), countdown_interval);
     }
 
+    /** go to next color, or if button is dead, send death event */
     private nextColor() {
         if(this.index === this.colorMapping.length - 1) {
             clearInterval(this.timer);
@@ -50,6 +51,7 @@ class ColorState {
         return io.emit(SocketEvent.UPDATE_COLOR, { color: this.color, index: this.index });
     }
 
+    /** reset timer and color */
     public reset(displayname: string) {
         this.addToFeed({ displayname, rank: this.color })
 
@@ -62,6 +64,7 @@ class ColorState {
         this.startTimer();
     }
 
+    /** add event to activity feed */
     private addToFeed(feedItem: FeedItem) {
         if(this.feed.length === MAX_FEED_LENGTH)
             this.feed.pop();
