@@ -130,7 +130,7 @@ router.post('/edit-displayname', [
 
 // ----- CHECK DISPLAYNAME ----- //
 
-/** on POST request to /auth/check-displayname */
+/** on GET request to /auth/check-displayname */
 router.get('/check-displayname', async (
     req: Request<{}, {}, {}, { displayname: string }>, 
     res: Response<{ available: boolean } | ResponseErrors>

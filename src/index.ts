@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import http from 'http';
 import socketio from 'socket.io';
@@ -75,7 +78,6 @@ io.on('connect', socket => {
     socket.emit(SocketEvent.UPDATE_COLOR, { color: colorState.color, index: colorState.index });
     socket.on(SocketEvent.PRESSED, (email?: string) => onPressedEvent(socket, email));
 })
-
 
 server.listen(port, function() {
     console.log(`The button server listening on port ${port}`)
