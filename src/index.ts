@@ -27,7 +27,7 @@ const corsOptions: cors.CorsOptions = {
     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Authorization", "Accept", "X-Access-Token"],
     credentials: true,
     methods: "GET,POST,PUT,DELETE",
-    origin: process.env['WEBSITE_URL'] || 'http://localhost:4200',
+    origin: process.env['WEB_ORIGIN'],
     preflightContinue: false
 };
 
