@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { colorState } from '../colorState';
+import { colorState } from '../types/colorState';
 import User from "../models/user";
 import { SocketEvent } from '../types/events';
 

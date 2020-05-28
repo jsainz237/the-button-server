@@ -1,6 +1,7 @@
-import { Rank } from "./types/ranks";
-import { io } from './index';
-import { SocketEvent } from "./types/events";
+import { Rank } from "./ranks";
+import { io } from '../index';
+import { SocketEvent } from "./events";
+import { IntervalTimer } from './timer';
 
 const MAX_FEED_LENGTH = 3;
 
@@ -13,11 +14,14 @@ class ColorState {
     public color: Rank = Rank.GRAY;
     public index: number = 0;
     public isDead: boolean = false;
-    private timer: any; // needs to be any cause typescript complains about Timeout vs number
     public feed: FeedItem[] = [];
 
+    public timer: IntervalTimer;
+    // private timer: any; // needs to be any cause typescript complains about Timeout vs number
+
     constructor() {
-        this.startTimer();
+        this.timer = new IntervalTimer(() => this.nextColor(), this.getRandomInterval());
+        this.timer.pause();
     }
 
     private colorMapping: Rank[] = [
@@ -29,39 +33,37 @@ class ColorState {
         Rank.ORANGE, Rank.ORANGE,
         Rank.RED
     ];
-    
-    private startTimer() {
-        const countdown_hours = Math.floor(Math.random() * 60) + 30; // 30 - 90 mins
-        const countdown_milliseconds = countdown_hours * 60000; // 60000 ms / min
-        //const countdown_milliseconds = countdown_hours * 10000; // mins
-        const countdown_interval = countdown_milliseconds / this.colorMapping.length;
 
-        this.timer = setInterval(() => this.nextColor(), countdown_interval);
+    private getRandomInterval(): number {
+        let countdown = Math.floor(Math.random() * 45) + 45; // 45 - 90 mins
+        countdown *= 1000; // 60000 ms / min
+
+        return countdown / this.colorMapping.length;
     }
 
     /** go to next color, or if button is dead, send death event */
     private nextColor() {
         if(this.index === this.colorMapping.length - 1) {
-            clearInterval(this.timer);
+            delete this.timer;
             this.isDead = true;
             return io.emit(SocketEvent.DEATH);
         }
+
         this.index += 1;
         this.color = this.colorMapping[this.index];
         return io.emit(SocketEvent.UPDATE_COLOR, { color: this.color, index: this.index });
     }
 
     /** reset timer and color */
-    public reset(displayname: string) {
+    public reset(displayname: string) {        
         this.addToFeed({ displayname, rank: this.color })
 
         io.emit(SocketEvent.RESET, { feed: this.feed });
         io.emit(SocketEvent.UPDATE_COLOR, { color: Rank.GRAY, index: 0 });
 
-        clearInterval(this.timer);
         this.index = 0;
         this.color = Rank.GRAY;
-        this.startTimer();
+        this.timer.restart(this.getRandomInterval());
     }
 
     /** add event to activity feed */

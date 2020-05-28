@@ -14,7 +14,7 @@ import { database } from './database';
 import authRoutes from './routes/auth';
 import { onPressedEvent } from './socket/pressed';
 import { Rank } from './types/ranks';
-import { colorState } from './colorState';
+import { colorState } from './types/colorState';
 
 const port = process.env.PORT || 5000;
 
@@ -67,16 +67,34 @@ database.sync({ force: forceSyncDB });
 app.use('/auth', authCheck, authRoutes);
 
 // Socket connections & events
+let clientList: SocketIO.Socket[] = [];
 io.on('connect', socket => {
-    // checkCookie(socket);
-    console.log('client connected');
+    clientList.push(socket);
+    console.log(`\nclient ${socket.id} connected`);
+    console.info(`current client count: ${clientList.length}`);
+    
     if(colorState.isDead) { 
         socket.emit(SocketEvent.DEATH)
         return;
+    } 
+    else if(clientList.length === 1) {
+        colorState.timer.resume();
     }
+
     socket.emit(SocketEvent.SEND_FEED, { feed: colorState.feed });
     socket.emit(SocketEvent.UPDATE_COLOR, { color: colorState.color, index: colorState.index });
     socket.on(SocketEvent.PRESSED, (email?: string) => onPressedEvent(socket, email));
+    
+    socket.on('disconnect', () => {
+        const socketIndex = clientList.indexOf(socket);
+        clientList.splice(socketIndex, 1);
+        console.log(`\nclient ${socket.id} disconnected`);
+        console.info(`current client count: ${clientList.length}`);
+
+        if(clientList.length === 0) {
+            colorState.timer.pause();
+        }
+    })
 })
 
 server.listen(port, function() {
