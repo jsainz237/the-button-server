@@ -38,20 +38,30 @@ router.post('/login', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    let user = await User.findOne({ where:  { email: req.body.email }});
-    if(user) {
-        return res.status(200).send({ email: user.email, displayname: user.displayname, rank: user.rank });
+    try {
+        let user = await User.findOne({ where:  { email: req.body.email }});
+        if(user) {
+            return res.status(200).send({ email: user.email, displayname: user.displayname, rank: user.rank });
+        }
+    } catch(err) {
+        console.log(err);
+        return res.status(400).send();
     }
 
-    const id = uuidv4();
-    user = await User.create({ 
-        id, 
-        email: req.body.email,
-        displayname: req.body.displayname,
-        ci_displayname: req.body.displayname.toLowerCase(), 
-        rank: Rank.GRAY 
-    })
-    return res.status(201).send({ email: user.email, displayname: user.displayname, rank: user.rank });
+    try {
+        const id = uuidv4();
+        let user = await User.create({ 
+            id, 
+            email: req.body.email,
+            displayname: req.body.displayname,
+            ci_displayname: req.body.displayname.toLowerCase(), 
+            rank: Rank.GRAY 
+        })
+        return res.status(201).send({ email: user.email, displayname: user.displayname, rank: user.rank });
+    } catch(err) {
+        console.log(err);
+        return res.status(400).send();
+    }
 })
 
 /** On POST request to /auth/userinfo */
