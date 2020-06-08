@@ -35,8 +35,8 @@ class ColorState {
     ];
 
     private getRandomInterval(): number {
-        let countdown = Math.floor(Math.random() * 45) + 45; // 45 - 90 mins
-        countdown *= 1000; // 60000 ms / min
+        let countdown = Math.floor(Math.random() * 10) + 20; // 20 - 30 mins
+        countdown *= 60000; // 60000 ms / min
 
         return countdown / this.colorMapping.length;
     }
@@ -44,7 +44,7 @@ class ColorState {
     /** go to next color, or if button is dead, send death event */
     private nextColor() {
         if(this.index === this.colorMapping.length - 1) {
-            delete this.timer;
+            this.timer.pause();
             this.isDead = true;
             return io.emit(SocketEvent.DEATH);
         }

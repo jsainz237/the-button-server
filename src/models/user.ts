@@ -1,4 +1,4 @@
-import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType, Default, IsAlphanumeric } from "sequelize-typescript";
+import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType, Default, Not } from "sequelize-typescript";
 import { Rank } from "../types/ranks";
 
 export interface UserAttr {
@@ -23,12 +23,10 @@ export default class User extends Model<User> implements UserAttr {
     email!: string;
 
     @AllowNull(false)
-    @IsAlphanumeric
     @Column
     displayname!: string;
 
     @AllowNull(false)
-    @IsAlphanumeric
     @Unique
     @Column
     ci_displayname!: string;
