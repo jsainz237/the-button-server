@@ -1,4 +1,4 @@
-import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType, Default, Not } from "sequelize-typescript";
+import { Model, Table, PrimaryKey, Unique, AllowNull, Column, DataType, Default } from "sequelize-typescript";
 import { Rank } from "../types/ranks";
 
 export interface UserAttr {
